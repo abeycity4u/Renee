@@ -28,7 +28,6 @@ if (!isLoggedIn()) {
                 
                 <?php if (checkAccess('poultry') || getUserType() === 'owner'): ?>
                 <li class="nav-item dropdown">
-                    <a class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="poultryDropdown" role="button" 
                        data-bs-toggle="dropdown">
                         <i class="bi bi-egg-fried"></i> Poultry
@@ -87,15 +86,21 @@ if (!isLoggedIn()) {
                         <i class="bi bi-gear"></i> Management
                     </a>
                     <ul class="dropdown-menu">
+                        <li><h6 class="dropdown-header">Reports</h6></li>
                         <li><a class="dropdown-item" href="sales_records.php">
-                            <i class="bi bi-graph-up"></i> Sales Records
+                            <i class="bi bi-graph-up"></i> Sales Report
                         </a></li>
                         <li><a class="dropdown-item" href="expenses.php">
-                            <i class="bi bi-cash-stack"></i> All Expenses
+                            <i class="bi bi-cash-stack"></i> Expense Report
+                        </a></li>
+                        <li><a class="dropdown-item" href="poultry_ruminant_report.php">
+                            <i class="bi bi-file-earmark-bar-graph"></i> Poultry & Ruminant Report
                         </a></li>
                         <li><a class="dropdown-item" href="reports.php">
                             <i class="bi bi-file-earmark-text"></i> Reports
                         </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Administration</h6></li>
                         <li><a class="dropdown-item" href="users.php">
                             <i class="bi bi-people"></i> Users
                         </a></li>

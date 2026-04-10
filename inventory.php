@@ -45,6 +45,34 @@ $categories = $pdo->query("SELECT * FROM inventory_categories ORDER BY category_
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['add_category'])) {
+        $categoryName = trim($_POST['category_name'] ?? '');
+
+        if ($categoryName === '') {
+            $_SESSION['error'] = "Category name is required.";
+            header('Location: inventory.php?open_add_item=1');
+            exit();
+        }
+
+        $checkCategoryStmt = $pdo->prepare("SELECT id FROM inventory_categories WHERE LOWER(category_name) = LOWER(?)");
+        $checkCategoryStmt->execute([$categoryName]);
+        $existingCategoryId = $checkCategoryStmt->fetchColumn();
+
+        if ($existingCategoryId) {
+            $_SESSION['success'] = "Category already exists and has been selected.";
+            header('Location: inventory.php?open_add_item=1&new_category=' . $existingCategoryId);
+            exit();
+        }
+
+        $insertCategoryStmt = $pdo->prepare("INSERT INTO inventory_categories (category_name) VALUES (?)");
+        $insertCategoryStmt->execute([$categoryName]);
+        $newCategoryId = $pdo->lastInsertId();
+
+        $_SESSION['success'] = "Category added successfully!";
+        header('Location: inventory.php?open_add_item=1&new_category=' . $newCategoryId);
+        exit();
+    }
+
     if (isset($_POST['add_item'])) {
         $stmt = $pdo->prepare("INSERT INTO stock_items 
             (item_name, category_id, current_stock, min_stock_level, unit, farm_type) 
@@ -367,14 +395,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label>Category</label>
+                                <div class="input-group">
                                 <select name="category_id" class="form-select" required>
                                     <option value="">Select Category</option>
                                     <?php foreach ($categories as $category): ?>
-                                    <option value="<?php echo $category['id']; ?>">
+                                    <option value="<?php echo $category['id']; ?>" <?php echo (isset($_GET['new_category']) && (int)$_GET['new_category'] === (int)$category['id']) ? 'selected' : ''; ?>>
                                         <?php echo htmlspecialchars($category['category_name']); ?>
                                     </option>
                                     <?php endforeach; ?>
                                 </select>
+                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                                    <i class="bi bi-plus-lg"></i> Add Category
+                                </button>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label>Farm Type</label>
@@ -473,6 +506,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 
+    <!-- Add Category Modal -->
+    <div class="modal fade" id="addCategoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Inventory Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Category Name</label>
+                            <input type="text" name="category_name" class="form-control"
+                                   placeholder="e.g. Feed, Medication, Equipment" required>
+                        </div>
+                        <small class="text-muted">
+                            This category will be available immediately in the “Add New Item” form.
+                        </small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="add_category" class="btn btn-primary">Save Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
         <div class="modal-dialog">
@@ -519,6 +580,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if (isset($_SESSION['error'])): ?>
         showAlert('danger', '<?php echo addslashes($_SESSION['error']); ?>');
         <?php unset($_SESSION['error']); endif; ?>
+
+        <?php if (isset($_GET['open_add_item']) && $_GET['open_add_item'] == '1'): ?>
+        const addItemModal = new bootstrap.Modal(document.getElementById('addItemModal'));
+        addItemModal.show();
+        <?php endif; ?>
     });
     
     // Update item info when select changes
