@@ -53,7 +53,7 @@ foreach ($expenses as $expense) {
     <?php include 'navbar_head.php'; ?> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Expenses - Renee Farms</title>
+    <title>Expense Report - Renee Farms</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 </head>
@@ -67,7 +67,7 @@ foreach ($expenses as $expense) {
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4>
                             <i class="bi bi-cash-stack"></i> 
-                            All Expenses - <?php echo date('F Y', strtotime($month)); ?>
+                            Expense Report - <?php echo date('F Y', strtotime($month)); ?>
                         </h4>
                         <div class="d-flex gap-2">
                             <select class="form-select" id="farmTypeFilter" style="width: 150px;">
@@ -87,6 +87,16 @@ foreach ($expenses as $expense) {
                             </select>
                             <input type="month" class="form-control" id="monthFilter" 
                                    value="<?php echo $month; ?>" style="width: 200px;">
+                            <a class="btn btn-outline-primary"
+                               href="print_expense_report.php?period=monthly&month=<?php echo urlencode($month); ?>&farm_type=<?php echo urlencode($farmType); ?>&category=<?php echo urlencode($category); ?>"
+                               target="_blank">
+                                <i class="bi bi-printer"></i> Print Monthly
+                            </a>
+                            <a class="btn btn-outline-secondary"
+                               href="print_expense_report.php?period=yearly&year=<?php echo date('Y', strtotime($month)); ?>&farm_type=<?php echo urlencode($farmType); ?>&category=<?php echo urlencode($category); ?>"
+                               target="_blank">
+                                <i class="bi bi-printer"></i> Print Yearly
+                            </a>
                         </div>
                     </div>
                     

@@ -492,8 +492,8 @@ $pageTitle = "Dashboard";
                                         <a href="sales_records.php" class="card quick-action-btn text-decoration-none border-danger text-center">
                                             <div class="card-body">
                                                 <i class="bi bi-cart-plus display-4 text-danger mb-2"></i>
-                                                <h6>Record Sale</h6>
-                                                <small class="text-muted">Add new sale</small>
+                                                <h6>Sales Report</h6>
+                                                <small class="text-muted">View and print sales</small>
                                             </div>
                                         </a>
                                     </div>
@@ -502,8 +502,8 @@ $pageTitle = "Dashboard";
                                         <a href="expenses.php" class="card quick-action-btn text-decoration-none border-secondary text-center">
                                             <div class="card-body">
                                                 <i class="bi bi-cash-coin display-4 text-secondary mb-2"></i>
-                                                <h6>Add Expense</h6>
-                                                <small class="text-muted">Record expense</small>
+                                                <h6>Expense Report</h6>
+                                                <small class="text-muted">View and print expenses</small>
                                             </div>
                                         </a>
                                     </div>

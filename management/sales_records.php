@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include 'navbar_head.php'; ?> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Records - Renee Farms</title>
+    <title>Sales Report - Renee Farms</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 </head>
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4>
                             <i class="bi bi-graph-up"></i> 
-                            Sales Records - <?php echo date('F Y', strtotime($month)); ?>
+                            Sales Report - <?php echo date('F Y', strtotime($month)); ?>
                         </h4>
                         <div class="d-flex gap-2">
                             <select class="form-select" id="farmTypeFilter" style="width: 150px;">
@@ -114,6 +114,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </select>
                             <input type="month" class="form-control" id="monthFilter" 
                                    value="<?php echo $month; ?>" style="width: 200px;">
+                            <a class="btn btn-outline-primary"
+                               href="print_sales_report.php?period=monthly&month=<?php echo urlencode($month); ?>&farm_type=<?php echo urlencode($farmType); ?>"
+                               target="_blank">
+                                <i class="bi bi-printer"></i> Print Monthly
+                            </a>
+                            <a class="btn btn-outline-secondary"
+                               href="print_sales_report.php?period=yearly&year=<?php echo date('Y', strtotime($month)); ?>&farm_type=<?php echo urlencode($farmType); ?>"
+                               target="_blank">
+                                <i class="bi bi-printer"></i> Print Yearly
+                            </a>
                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSaleModal">
                                 <i class="bi bi-plus-circle"></i> Add Sale
                             </button>

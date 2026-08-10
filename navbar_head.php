@@ -6,6 +6,8 @@
 
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
 
 <!-- Custom CSS -->
 <link rel="stylesheet" href="assets/css/style.css">
@@ -22,4 +24,28 @@
         farmType: <?php echo json_encode(getUserFarmType()); ?>,
         csrfToken: <?php echo json_encode(bin2hex(random_bytes(32))); ?>
     };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('input[type="month"]').forEach(function (input) {
+            const initialValue = input.value;
+            input.type = 'text';
+            input.setAttribute('readonly', 'readonly');
+
+            flatpickr(input, {
+                dateFormat: 'Y-m',
+                defaultDate: initialValue || new Date(),
+                allowInput: false,
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "Y-m",
+                        altFormat: "F Y"
+                    })
+                ]
+            });
+        });
+    });
 </script>
